@@ -317,8 +317,17 @@ python scripts\provision_gateway_keys.py roster.csv --apply --email
 .\file_in_1password.ps1
 ```
 
+Scope either step to part of the roster with `--team`, a glob on the
+team column — `--team "MLM26-*"` redoes one event's keys and leaves the
+standing ones (`admin`, `WaMS`, …) alone. Repeat the flag for more than
+one pattern.
+
 `--revoke` deletes from the gateway immediately on `--apply` and emits
 the 1Password half as a script, for the same reason provisioning does.
+Running that script is optional: `file_in_1password.ps1` removes any
+leftover item with the same title before creating a fresh one, so a
+redo is clean whether you ran `revoke_in_1password.ps1`, deleted the
+items by hand, or skipped that step entirely.
 Then fix the roster and re-run provisioning; the dry run should list
 only the people you just revoked.
 
