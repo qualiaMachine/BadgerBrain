@@ -164,7 +164,7 @@ Two things make this the step most likely to bite you:
   the rule gets `Unable to connect to the remote server` — no 401, no
   mention of the firewall. They will report it as a broken key, and you
   will debug the key. The triage steps are in
-  [the user quickstart](gateway-quickstart.md#before-anything-else-the-vpn):
+  [the user quickstart](gateway-quickstart.md#network-access):
   DNS resolves and ping succeeds, but TCP 443 fails.
 
 Consequences worth planning around:
@@ -409,7 +409,7 @@ When you do add a limit, two things to keep in mind:
 - **`rpm` is the wrong unit for token-heavy work.** One request with a
   100k-token context costs far more GPU than a hundred short chats, and
   rpm treats them identically. For document extraction or batch
-  summarization, `tpm_limit` is the honest control.
+  summarization, `tpm_limit` is the right control.
 - **Per-key limits stop individuals; team limits protect the pilot.**
   Forty people at 60 rpm each is well past what two GPUs serve, so
   per-key ceilings never protected capacity — the team limit is the

@@ -5,74 +5,106 @@ participant, a lab member, someone building an app. You call the models
 over HTTP from your own laptop, notebook, or server. You don't need a
 Run:ai account, and you never log into the cluster.
 
-> If instead you want to *run* your own model, fine-tune, or get a GPU
-> workspace, that's a different path — start at the
-> [New User Guide](../README.md#new-user-guide).
+The gateway is at **`https://llm-gw01.doit.wisc.edu/v1`** and speaks the
+OpenAI API, so any client that lets you set a base URL works unmodified:
+the `openai` Python package, `httr2` in R, LangChain, LlamaIndex, curl,
+Postman.
 
-## What you have
+| Model | Type | Use it for |
+|-------|------|-----------|
+| `qwen3.8-27b` | chat | General text: writing, reasoning, code, summarisation |
+| `churro-3b` | chat + vision | OCR of historical documents and handwriting; send page images |
+| `qwen3-vl-embedding-8b` | embeddings | 4096-dim vectors for search / RAG; handles text and images |
 
-| | |
-|---|---|
-| **Base URL** | `https://llm-gw01.doit.wisc.edu/v1` |
-| **API key** | your `sk-…` — ask Chris (endemann@wisc.edu); it arrives as a 1Password share link |
+That's the catalogue as of September 2026. It changes: check this doc for
+the latest, or once you're connected, run the command under
+[Listing models](#listing-models) to see exactly what your key can call.
+Want a model that isn't hosted? Talk to Chris. The pilot runs on two
+RTX Pro 6000s (96 GB VRAM each), and the shared endpoints already
+occupy most of that, so adding a model usually means trading one out.
 
-The gateway speaks the **OpenAI API**. Any client library that lets you
-change the base URL works unmodified — the `openai` Python package,
-`httr2` in R, LangChain, LlamaIndex, curl, Postman.
+> **A key gets you these models, not the cluster.** Running your own
+> model, fine-tuning, or getting a GPU workspace needs a Run:ai account,
+> which is a separate request rather than something a key upgrades into.
+> Available on request, but GPU time isn't guaranteed — see
+> [Scope](#scope).
 
-## Before anything else: the VPN
+## PowerShell and bash
 
-Two things have to be true before anything below works:
+Commands come in pairs: **PowerShell first, then bash/zsh**. Three
+differences matter:
+
+| | PowerShell | bash / zsh |
+|---|---|---|
+| Set a variable | `$env:NAME = "value"` | `export NAME=value` |
+| Use a variable | `$env:NAME` | `$NAME` |
+| `curl` | an *alias* for `Invoke-WebRequest` — use `Invoke-RestMethod`, or `curl.exe` for the real thing | real curl |
+
+PowerShell keeps environment variables in a separate `env:` namespace.
+`$OPENAI_API_KEY` without the prefix is an ordinary variable that doesn't
+exist; it evaluates to empty, the header becomes `"Bearer "`, and the
+gateway answers *"Malformed API Key"*.
+
+> **On Windows, use PowerShell rather than Git Bash** for anything
+> involving `op`. The 1Password desktop integration refuses connections
+> from Git Bash and reports *"account is not signed in"*.
+
+## Network access
+
+Two things must be true before any of this works:
 
 1. **You're on GlobalProtect**, including from on-campus wifi.
 2. **Your NetID has been added to the firewall rule.** Access to the
    gateway is granted per person at the campus firewall, so being on the
    VPN isn't enough on its own. Chris arranges this when you request a
-   key — but it's a manual step with a lead time, so if you've just been
-   given a key, check it's been done before assuming something's broken.
+   key. It's a manual step with a lead time.
 
-Neither failure announces itself. Both look like a hang or
-`Unable to connect to the remote server`.
-
-If you're on the VPN and still can't connect, find out which layer is
-failing before assuming your key is wrong:
+Both failures look the same: a hang, or
+`Unable to connect to the remote server`. To tell which:
 
 ```powershell
+# PowerShell
 Resolve-DnsName llm-gw01.doit.wisc.edu
 Test-NetConnection llm-gw01.doit.wisc.edu -Port 443
+```
+
+```bash
+# bash / zsh — 401 means you reached the gateway and it wants a key,
+# which is the result you want here. A hang or connection error is
+# VPN or firewall.
+curl -s -o /dev/null -w "%{http_code}\n" --max-time 10 \
+  https://llm-gw01.doit.wisc.edu/v1/models
 ```
 
 | Result | Meaning |
 |---|---|
 | DNS fails | Not on the VPN, or a DNS problem — reconnect GlobalProtect |
-| `PingSucceeded: True`, `TcpTestSucceeded: False` | **Almost always your NetID isn't in the firewall rule yet.** The host is reachable, but the firewall drops your connection before the gateway ever sees it. Nothing you can fix and nothing to do with your key — message Chris with your NetID and the full `Test-NetConnection` output |
+| `PingSucceeded: True`, `TcpTestSucceeded: False` | Your NetID isn't in the firewall rule yet. The host is reachable, but the firewall drops the connection before the gateway sees it. Send Chris your NetID and the full `Test-NetConnection` output |
 | `TcpTestSucceeded: True` | Network is fine; the problem is your key or your request — see the troubleshooting table at the bottom |
-
-That middle case is worth knowing about: access is allowed per VPN
-address range, so it's possible to be properly connected and still be
-refused.
 
 ## Step 1 — Get your key, and save it
 
-**Don't have a key yet?** Ask Chris (endemann@wisc.edu) for one. Tell him
+**Don't have a key yet?** Request one through the
+[Badger Brain access form](https://forms.gle/vkcLzApNrX7KbkTP9). It asks
 which group or project you're with, so your usage lands under the right
-team. He'll send it as a **1Password share link** — that's the only way
-keys go out here, so if someone offers to paste one into Teams or an
-email, ask for a share link instead.
+team, and your NetID, so the firewall rule can be updated. The key
+arrives as a **1Password share link** — that's the only way keys go out
+here.
 
-The link is locked to your `@wisc.edu` address and expires, so open it
-reasonably promptly. If it's expired or you lose it, ask for another —
-re-sharing is trivial and far better than working around it.
+The link is locked to your `@wisc.edu` address and expires. If it has
+expired or you lose it, request another.
 
-When you open it, **save the item into your own 1Password**. From then
+When you open it, **save the item into your UW-Madison 1Password
+account** — every NetID has one; DoIT's KB covers
+[receiving shared items](https://kb.wisc.edu/security/144574). From then
 on it's yours. Don't paste the key into a file, a notebook, or a chat
 message — it identifies you, and everything you run is recorded against
 it.
 
 ## Step 2 — Load it into your shell
 
-Best done with the **1Password CLI** (`op`), which reads the key straight
-out of your vault so it never appears in your shell history or your code.
+Use the **1Password CLI** (`op`), which reads the key from your vault so
+it never appears in your shell history or your code.
 
 Install it once:
 
@@ -89,16 +121,14 @@ brew install 1password-cli
 Full instructions, including Linux:
 <https://developer.1password.com/docs/cli/get-started/>
 
-Then enable the desktop integration, which is what lets `op` unlock
-without a password: **1Password app → Settings → Developer → "Integrate
-with 1Password CLI"**, then quit and reopen the app. Check it works:
+Enable the desktop integration: **1Password app → Settings → Developer →
+"Integrate with 1Password CLI"**, then quit and reopen the app. Check:
 
 ```
 op whoami
 ```
 
-If that prints your account, you're set. Now load the key at the start of
-each session:
+Then load the key at the start of each session:
 
 ```powershell
 # PowerShell — replace with your item's name
@@ -110,9 +140,8 @@ $env:OPENAI_API_KEY = op read "op://Private/wams_bbadger/credential"
 export OPENAI_API_KEY=$(op read 'op://Private/wams_bbadger/credential')
 ```
 
-**No 1Password CLI, or `op` won't authenticate?** You don't need it —
-the share link works on its own. Open the item in 1Password (or the
-browser extension), copy the key, and set the variable for this session
+**If `op` won't authenticate**, open the item in the 1Password app or
+browser extension, copy the key, and set the variable for this session
 only:
 
 ```powershell
@@ -123,30 +152,32 @@ $env:OPENAI_API_KEY = "sk-..."      # PowerShell
 export OPENAI_API_KEY=sk-...        # bash / zsh
 ```
 
-Still don't put it in your code — a key in a notebook cell gets committed
-to git eventually.
+Confirm it's set. This prints only the first few characters:
 
-> You do **not** need a 1Password account to open a share link, which is
-> why this works for collaborators outside UW-Madison. UW-Madison staff
-> and students do have 1Password available; DoIT's KB covers accounts and
-> [item sharing](https://kb.wisc.edu/security/144574).
+```powershell
+$env:OPENAI_API_KEY.Substring(0,6)     # PowerShell — expect sk-...
+```
+
+```bash
+echo ${OPENAI_API_KEY:0:6}             # bash / zsh — expect sk-...
+```
+
+An error or blank line means it isn't set. Don't put the key in your
+code.
 
 ## Step 3 — Start your tools from that same terminal
 
 `python`, `jupyter lab`, `R`, `rstudio`, `code .` — launch whichever you
 use **from the shell where you just set the variable**.
 
-This is the step people trip on. The variable lives in that one shell
-session. A notebook opened from the Start menu or a desktop icon won't
-see it, and the client reports a missing API key — which reads like a
-broken key rather than a missing step. It's also gone when you close the
-terminal, so Step 2 repeats each session unless you add it to your shell
-profile.
+The variable lives in that one shell session. A notebook opened from the
+Start menu or a desktop icon won't see it, and the client reports a
+missing API key. It's also gone when you close the terminal, so Step 2
+repeats each session unless you add it to your shell profile.
 
-## Which models can I call?
+## Listing models
 
-Ask the gateway rather than trusting a list in a doc — the catalogue
-changes:
+The table at the top is a snapshot. To see the current list:
 
 ```powershell
 # PowerShell
@@ -160,22 +191,7 @@ curl -s https://llm-gw01.doit.wisc.edu/v1/models \
   -H "Authorization: Bearer $OPENAI_API_KEY"
 ```
 
-> **Two PowerShell traps**, and they produce confusing errors rather than
-> clear ones:
-> - **`curl` is an alias for `Invoke-WebRequest`**, so bash-style `curl -H ...`
->   fails with *"Cannot bind parameter 'Headers'"*. Use `Invoke-RestMethod`
->   as above, or spell it `curl.exe` to get the real curl.
-> - **The variable is `$env:OPENAI_API_KEY`, not `$OPENAI_API_KEY`.** The
->   bash spelling is simply undefined in PowerShell, so your header becomes
->   `"Bearer "` and the gateway replies *"Malformed API Key"*.
-
-As of September 2026:
-
-| Model | Type | Use it for |
-|-------|------|-----------|
-| `qwen3.8-27b` | chat | General text: writing, reasoning, code, summarisation |
-| `churro-3b` | chat + vision | OCR of historical documents and handwriting; send page images |
-| `qwen3-vl-embedding-8b` | embeddings | 4096-dim vectors for search / RAG; handles text and images |
+If this errors in PowerShell, see [PowerShell and bash](#powershell-and-bash).
 
 ## Python
 
@@ -266,10 +282,9 @@ chat$chat("Explain PCA in two sentences.")
 chat$chat("Now give an example with gene expression data.")
 ```
 
-ellmer moves quickly — check `?chat_openai_compatible` if an argument
-name doesn't match. It also ships `chat_vllm()`, a thin wrapper over the
-same thing that reads `VLLM_API_KEY` instead; either works against the
-gateway.
+Check `?chat_openai_compatible` if an argument name doesn't match —
+ellmer changes between releases. `chat_vllm()` is the same thing reading
+`VLLM_API_KEY` instead; either works.
 
 ### httr2 (anything, including embeddings)
 
@@ -317,40 +332,106 @@ m <- embed(c("badgers dig burrows", "the mitochondria is the powerhouse"))
 dim(m)   # 2 x 4096
 ```
 
-> **If `Sys.getenv("OPENAI_API_KEY")` comes back empty in RStudio**, it
-> was launched without inheriting your shell environment (Step 3). Either
-> start RStudio from the terminal where you set the variable, or add the
-> line to `~/.Renviron` — never to your `.R` script.
+> **`Error: nzchar(key) is not TRUE` means `Sys.getenv("OPENAI_API_KEY")`
+> came back empty** — RStudio was started without inheriting your shell
+> environment (Step 3). Your key is fine. Two ways to fix it:
+>
+> **Persist it** (what most RStudio users want):
+>
+> ```r
+> usethis::edit_r_environ()      # opens ~/.Renviron
+> ```
+>
+> Add one line — no quotes, no `export`:
+>
+> ```
+> OPENAI_API_KEY=sk-...
+> ```
+>
+> Then **Session → Restart R** — `.Renviron` is read only at startup.
+> Check with `nchar(Sys.getenv("OPENAI_API_KEY"))`.
+>
+> Call `edit_r_environ()` with no arguments so it edits the **user-level**
+> file in your home directory. `edit_r_environ("project")` writes one into
+> the project folder, where it gets committed. And never put the key in a
+> `.R` script.
+>
+> **Just for this session**, if you'd rather not keep the key on disk —
+> pops a dialog, you paste into it, and nothing lands in your console
+> history or a file:
+>
+> ```r
+> Sys.setenv(OPENAI_API_KEY = rstudioapi::askForSecret("OPENAI_API_KEY"))
+> ```
+>
+> Gone when R restarts. `.Renviron` is plaintext on disk; prefer this on
+> a shared machine.
 
-## The first call can take a couple of minutes
+### Keeping the key out of `.Renviron`
 
-Some models are configured to release their GPU when idle. The first
-request after a quiet period **waits while a GPU replica starts** —
-typically 90 seconds or so. The connection is held open the whole time;
-nothing is lost.
+There is no 1Password SDK for R — the official ones are Go, JS and Python
+— so the options are the CLI or the OS keychain.
 
-Practical consequences:
+**Launch RStudio through `op run`.** 1Password resolves the reference at
+launch and RStudio inherits the real value; nothing is written to disk.
+Put a *reference* (not a key) in `rstudio.env`:
 
-- **Set a generous client timeout.** The examples above use 300 seconds.
-  A default 30- or 60-second timeout will give up mid-startup and look
-  like a failure.
-- **Don't treat a slow first call as broken.** Try a second request
-  before reporting a problem — if the second is fast, that was a cold
-  start working exactly as designed.
+```
+OPENAI_API_KEY=op://<vault>/<your item>/credential
+```
+
+```powershell
+# Windows PowerShell / Windows Terminal — close RStudio first
+op run --env-file=.\rstudio.env -- "C:\Program Files\RStudio\rstudio.exe"
+```
+
+```bash
+# macOS
+op run --env-file=./rstudio.env -- open -a RStudio
+```
+
+That file is safe to commit — it contains no secret.
+
+> **Not from RStudio's Terminal pane.** That tab is a separate process
+> from the R console, so variables set there never reach `Sys.getenv()`.
+> Run `op run` from a real terminal with RStudio closed. Already in a
+> session? Use `keyring` below.
+
+**`keyring`**, if `op` won't cooperate. Uses Windows Credential Manager
+or the macOS Keychain, so still no plaintext file:
+
+```r
+keyring::key_set("litellm")                                  # once, prompts
+Sys.setenv(OPENAI_API_KEY = keyring::key_get("litellm"))     # each session
+```
+
+**Calling `op` from inside R** (`system2("op", c("read", "op://..."))`)
+usually fails with *"account is not signed in"*: the desktop integration
+authorises by calling application, and `rsession` isn't one it accepts.
+
+## Cold starts
+
+Some models release their GPU when idle. The first request after a quiet
+period waits while a replica starts — about 90 seconds. The connection
+is held open; nothing is lost.
+
+- **Set a long client timeout.** The examples use 300 seconds; a
+  30- or 60-second default gives up mid-startup.
+- **A slow first call isn't a fault.** If a second request is fast, the
+  first was a cold start.
 - `qwen3.8-27b` stays warm; `churro-3b` and `qwen3-vl-embedding-8b`
   are the ones that sleep.
 
-## Always call the gateway URL
+## Use the gateway URL, not model hostnames
 
 You may come across a direct model hostname ending in
 `deepthought.doit.wisc.edu`. **Don't use it.** Those answer without a key,
-so calls that bypass the gateway don't appear in usage reporting — and
-unattributed traffic is what gets a pilot's capacity questioned. Use
+so calls that bypass the gateway don't appear in usage reporting. Use
 `https://llm-gw01.doit.wisc.edu/v1` for everything.
 
 ## Check your own usage
 
-No login needed — your key can query itself:
+Your key can query itself:
 
 ```powershell
 # PowerShell
@@ -366,11 +447,11 @@ curl -s https://llm-gw01.doit.wisc.edu/key/info \
 
 That shows your key's limits and what it's spent so far.
 
-## When something breaks
+## Troubleshooting
 
 | What you see | What it usually means |
 |---|---|
-| Hang, or DNS/connection error | Not on GlobalProtect |
+| Hang, or `Unable to connect to the remote server` | Not on GlobalProtect, or your NetID isn't in the firewall rule yet — see [Network access](#network-access) to tell which |
 | `Malformed API Key ... Ensure Key has 'Bearer ' prefix` | Your key never made it into the header. In PowerShell, check you wrote `$env:OPENAI_API_KEY` and not `$OPENAI_API_KEY`, and that any `$headers` variable was built *after* setting it — it captures the value at assignment. In Python, restart the process after setting the variable |
 | `Cannot bind parameter 'Headers'` or `A drive with the name 'https' does not exist` | You ran a bash `curl` command in PowerShell, where `curl` aliases `Invoke-WebRequest`. Use `Invoke-RestMethod`, or `curl.exe` |
 | `Invalid proxy key` / 401 | Wrong key, or it expired — ask for a new share link |
@@ -378,19 +459,32 @@ That shows your key's limits and what it's spent so far.
 | Timeout on the first call | Cold start — raise your client timeout to 300s and retry |
 | 429 | Rate limited. Back off and retry; if it's persistent, ask for a higher limit |
 
-Anything else, a model that's consistently unavailable, or a key you've
-lost: contact Chris (endemann@wisc.edu) — a replacement key is a
-one-minute job. Include the model name and the exact error text — the error body
-from the gateway says which layer failed.
+Lost your key? Request a replacement through the
+[access form](https://forms.gle/vkcLzApNrX7KbkTP9). Anything else:
+contact Chris with the model name and the exact error text.
 
-## What this doesn't cover
+## Scope
 
-A gateway key lets you **call** the shared models. It doesn't give you a
-Run:ai account, a GPU, storage on the cluster, or the ability to host
-your own model. If you need those, that's the
-[New User Guide](../README.md#new-user-guide) — start with
-[00 Overview](00-overview.md) and mention what you're trying to do.
+A gateway key lets you **call** the models in the catalogue. It doesn't
+give you a Run:ai account, a GPU, storage on the cluster, or the ability
+to host your own model.
 
-Also worth knowing: this is a **pilot**. Read the
+**Cluster access is available on request, not by default.** If you want
+to explore fine-tuning or run something the gateway can't do, talk to
+Chris. The pilot has two RTX Pro 6000s (96 GB each) for at least the next
+six months, and the shared endpoints already live on them, so GPU time
+for your own workload can't be promised.
+
+**Asking for another model is fine.** It's a config change plus a
+pipeline deploy on our side, not a rebuild of anything. A model already
+on the cluster can usually be exposed within minutes; one that has to be
+downloaded and given its own GPU workload takes longer. Either way, ask
+sooner rather than at the moment you need it.
+
+If you do get an account, the
+[New User Guide](../README.md#new-user-guide) describes what's involved,
+starting with [00 Overview](00-overview.md).
+
+This is a **pilot**. Read the
 [Usage Policy](usage-policy.md) before putting real data through it —
 public data only, and no availability guarantees.
