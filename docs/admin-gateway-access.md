@@ -151,6 +151,7 @@ Send Mike the NetIDs of everyone who needs access and wait for the rule to
 commit. The `netid` column of your roster is exactly this list:
 
 ```powershell
+cd C:\Users\endemann\Documents\GitHub\RunAI_apps
 (Import-Csv roster.csv).netid -join ", "
 ```
 
@@ -226,6 +227,9 @@ astudent,marathon-team-07,astudent@wisc.edu,,7d
 read` in *your* shell is trusted, so the key is never typed or displayed:
 
 ```powershell
+cd C:\Users\endemann\Documents\GitHub\RunAI_apps
+git pull                                                        # script changes land here
+
 $env:LITELLM_MASTER_KEY = op read "op://BadgerBrain_LiteLLM/LITELLM_MASTER_KEY/credential"
 # bash: export LITELLM_MASTER_KEY=$(op read 'op://BadgerBrain_LiteLLM/LITELLM_MASTER_KEY/credential')
 
@@ -265,6 +269,26 @@ Useful flags: `--vault` (default `BadgerBrain_LiteLLM`), `--gateway`,
 on the gateway's key aliases, or on the vault when running `--use-op` — so
 adding rows and re-running onboards only the new people. If that check
 can't run, the script says so rather than quietly minting duplicates.
+
+**Revoking keys.** To reissue a key, or clean up ones minted with the
+wrong team name, remove both halves first — the script skips anyone
+whose alias already exists:
+
+```powershell
+python scripts\provision_gateway_keys.py --list                          # every alias on the gateway
+python scripts\provision_gateway_keys.py --revoke wams_bbadger osky_x   # dry run
+python scripts\provision_gateway_keys.py --revoke wams_bbadger osky_x --apply
+.\revoke_in_1password.ps1                                              # removes the 1Password items
+```
+
+`--revoke` deletes from the gateway immediately on `--apply` and emits
+the 1Password half as a script, for the same reason provisioning does.
+Then fix the roster and re-run provisioning; the dry run should list
+only the people you just revoked.
+
+Team and netid are validated on load: lowercase, no spaces, only
+letters, digits, `.`, `_`, `-`. A row like `ML Marathon` fails with a
+suggested fix (`ml-marathon`) before anything is minted.
 
 `file_in_1password.ps1` holds live credentials until you run it, at which
 point it deletes itself. If you abandon a run partway, delete it by hand.
