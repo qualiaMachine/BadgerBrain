@@ -85,7 +85,7 @@ curl -s -o /dev/null -w "%{http_code}\n" --max-time 10 \
 ## Step 1 — Get your key, and save it
 
 **Don't have a key yet?** Request one through the
-[Badger Brain access form](https://forms.gle/vkcLzApNrX7KbkTP9). It asks
+[BadgerBrain access form](https://forms.gle/vkcLzApNrX7KbkTP9). It asks
 which group or project you're with, so your usage lands under the right
 team, and your NetID, so the firewall rule can be updated. The key
 arrives as a **1Password share link** — that's the only way keys go out

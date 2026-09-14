@@ -1,8 +1,8 @@
-Subject: Your Badger Brain API key
+Subject: Your BadgerBrain API key
 
 Hi {netid},
 
-Your API key for the Badger Brain model gateway is ready. It's shared
+Your API key for the BadgerBrain model gateway is ready. It's shared
 through 1Password:
 
 {link}
