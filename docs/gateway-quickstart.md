@@ -85,7 +85,7 @@ curl -s -o /dev/null -w "%{http_code}\n" --max-time 10 \
 ## Step 1 — Get your key, and save it
 
 **Don't have a key yet?** Request one through the
-[Badger Brain access form](https://forms.gle/vkcLzApNrX7KbkTP9). It asks
+[BadgerBrain access form](https://forms.gle/vkcLzApNrX7KbkTP9). It asks
 which group or project you're with, so your usage lands under the right
 team, and your NetID, so the firewall rule can be updated. The key
 arrives as a **1Password share link** — that's the only way keys go out
@@ -95,9 +95,13 @@ The link is locked to your `@wisc.edu` address and expires. If it has
 expired or you lose it, request another.
 
 When you open it, **save the item into your UW-Madison 1Password
-account** — every NetID has one; DoIT's KB covers
-[receiving shared items](https://kb.wisc.edu/security/144574). From then
-on it's yours. Don't paste the key into a file, a notebook, or a chat
+account**. Accounts aren't automatic: if you don't have one, request it
+at <https://profile.wisc.edu/doit-services> (1Password under Eligible
+Services → Request Activation), then accept the invitation email from
+`accounts@1password.com` and sign in with your NetID — see
+[Getting Started with 1Password at UW-Madison](https://kb.wisc.edu/security/144301).
+Receiving a shared item is covered in
+[KB 144574](https://kb.wisc.edu/security/144574). From then on it's yours. Don't paste the key into a file, a notebook, or a chat
 message — it identifies you, and everything you run is recorded against
 it.
 
