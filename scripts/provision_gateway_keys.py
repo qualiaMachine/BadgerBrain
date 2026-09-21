@@ -689,6 +689,27 @@ def main():
               + ", ".join(r["netid"] for r in skipped))
 
     if not args.apply:
+        if args.email and todo:
+            subj, body = load_email_template(args.email_template)
+            r = todo[0]
+            fill = {"{netid}": r["netid"].strip(), "{team}": r["team"].strip(),
+                    "{email}": r["email"].strip(), "{expires}": args.expires_in,
+                    "{link}": "https://share.1password.com/s#<generated at send time>"}
+            for k, v in fill.items():
+                subj = subj.replace(k, v)
+                body = body.replace(k, v)
+            to = args.email_override or r["email"].strip()
+            print("\n" + "=" * 72)
+            print(f"Email preview ({len(todo)} will be sent, this is the first)")
+            print("=" * 72)
+            print(f"To:      {to}")
+            if args.email_override:
+                print(f"         (--email-override; real address is {r['email'].strip()})")
+            print(f"Subject: {subj}\n")
+            print(body)
+            print("=" * 72)
+            print(f"Template: {args.email_template}")
+
         print("\nDry run. Re-run with --apply to create these.")
         return 0
     if not todo and not new_teams:

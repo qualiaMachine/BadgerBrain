@@ -280,6 +280,10 @@ python scripts\provision_gateway_keys.py roster.csv --apply --email
 .\file_in_1password.ps1
 ```
 
+The dry run (no `--apply`) prints the first person's email fully
+rendered — real name, real address, real subject — so you can read it
+before anything is sent.
+
 The message comes from `scripts/key_email.txt`: a `Subject:` line, a
 blank line, then the body. Placeholders `{netid}`, `{team}`, `{email}`,
 `{link}` and `{expires}` are filled per person. Edit it or point
