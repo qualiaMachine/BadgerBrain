@@ -217,6 +217,7 @@ astudent,marathon-team-07,astudent@wisc.edu,,7d
 
 | Column | Notes |
 |--------|-------|
+| `name` | Full name as given on the request form. Only used to greet people by first name in the email — `{first_name}` takes the first word, or the part after a comma for "Last, First". Optional; without it the greeting falls back to the netid |
 | `netid` | With `team`, forms the identifier used everywhere: gateway key alias, 1Password item title, all `team_netid`. `netid` alone is the `user_id` |
 | `team` | Any grouping label — created automatically if it doesn't exist yet |
 | `email` | Who the share link is locked to |
@@ -285,7 +286,7 @@ rendered — real name, real address, real subject — so you can read it
 before anything is sent.
 
 The message comes from `scripts/key_email.txt`: a `Subject:` line, a
-blank line, then the body. Placeholders `{netid}`, `{team}`, `{email}`,
+blank line, then the body. Placeholders `{first_name}`, `{name}`, `{netid}`, `{team}`, `{email}`,
 `{link}` and `{expires}` are filled per person. Edit it or point
 `--email-template` at another file.
 

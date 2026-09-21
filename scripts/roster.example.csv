@@ -1,5 +1,5 @@
-netid,team,email,rpm_limit,duration
-bbadger,wams,bbadger@wisc.edu,,
-osky,wams,osky@wisc.edu,,
-astudent,marathon-team-07,astudent@wisc.edu,,7d
-bstudent,marathon-team-07,bstudent@wisc.edu,,7d
+name,netid,team,email,rpm_limit,duration
+Bucky Badger,bbadger,wams,bbadger@wisc.edu,,
+Oskar Skarsgard,osky,wams,osky@wisc.edu,,
+Ada Student,astudent,marathon-team-07,astudent@wisc.edu,,7d
+Ben Student,bstudent,marathon-team-07,bstudent@wisc.edu,,7d

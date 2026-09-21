@@ -69,7 +69,7 @@ astudent,marathon-team-07,astudent@wisc.edu,,7d
 bstudent,marathon-team-07,bstudent@wisc.edu,,7d
 """
 
-COLUMNS = "netid,team,email,rpm_limit,duration"
+COLUMNS = "name,netid,team,email,rpm_limit,duration"
 
 
 class Fatal(Exception):
@@ -136,6 +136,18 @@ def op_check_signin():
     )
 
 
+def first_name(row):
+    """Greeting name from the roster's `name` column, falling back to the
+    netid. Handles "Last, First" as well as "First Last"; anything with no
+    name recorded just gets their netid."""
+    full = (row.get("name") or "").strip()
+    if not full:
+        return (row.get("netid") or "").strip()
+    if "," in full:                      # "Abdul Kadir, Khayyum"
+        full = full.split(",", 1)[1].strip()
+    return full.split()[0] if full.split() else (row.get("netid") or "").strip()
+
+
 def item_title(team, netid):
     """The one identifier for a person: gateway key alias, 1Password item
     title, and the key the idempotency check matches on. These must agree,
@@ -148,7 +160,7 @@ def item_title(team, netid):
 
 def load_email_template(path):
     """First line 'Subject: ...', blank line, then the body. Placeholders:
-    {netid} {team} {email} {link} {expires}."""
+    {first_name} {name} {netid} {team} {email} {link} {expires}."""
     with open(path, encoding="utf-8") as f:
         text = f.read()
     head, _, body = text.partition("\n\n")
@@ -217,7 +229,7 @@ def emit_op_script(path, rows, vault, gateway, expires, view_once=False,
     # to an expiring, recipient-locked link: a fumbled single-view link
     # costs a re-share, while an expiry bounds the window either way.
     limit = "--view-once" if view_once else f'--expires-in "{expires}"'
-    for netid, email_addr, key, team in rows:
+    for netid, email_addr, key, team, greet, full in rows:
         title = item_title(team, netid)
         create = (f'op item create --category "API Credential" '
                   f'--vault "{vault}" --title "{title}" '
@@ -234,7 +246,8 @@ def emit_op_script(path, rows, vault, gateway, expires, view_once=False,
             if email:
                 subj, body = email
                 fill = {"{netid}": netid, "{team}": team, "{email}": email_addr,
-                        "{expires}": expires}
+                        "{expires}": expires, "{first_name}": greet,
+                        "{name}": full}
                 for k, v in fill.items():
                     subj = subj.replace(k, v); body = body.replace(k, v)
                 to = email_override or email_addr
@@ -535,7 +548,8 @@ def main():
                    default=os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                         "key_email.txt"),
                    help="'Subject: ...' line, blank line, body. Placeholders "
-                        "{netid} {team} {email} {link} {expires}")
+                        "{first_name} {name} {netid} {team} {email} {link} "
+                        "{expires}")
     p.add_argument("--email-override", metavar="ADDR",
                    help="send every email to ADDR instead of the roster "
                         "address -- for testing the template on yourself")
@@ -694,6 +708,8 @@ def main():
             r = todo[0]
             fill = {"{netid}": r["netid"].strip(), "{team}": r["team"].strip(),
                     "{email}": r["email"].strip(), "{expires}": args.expires_in,
+                    "{first_name}": first_name(r),
+                    "{name}": (r.get("name") or "").strip(),
                     "{link}": "https://share.1password.com/s#<generated at send time>"}
             for k, v in fill.items():
                 subj = subj.replace(k, v)
@@ -738,7 +754,8 @@ def main():
             print(f"FAILED: {title} -- {str(e).splitlines()[0]}")
             continue
         if not args.use_op:
-            pending.append((netid, r["email"].strip(), key, team))
+            pending.append((netid, r["email"].strip(), key, team,
+                            first_name(r), (r.get("name") or "").strip()))
             print(f"minted: {netid}")
         else:
             op_item_create(title, args.vault, key, netid, args.gateway,

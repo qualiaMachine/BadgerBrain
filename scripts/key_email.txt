@@ -1,6 +1,6 @@
 Subject: Your BadgerBrain API key
 
-Hi {netid},
+Hi {first_name},
 
 Your API key for the BadgerBrain model gateway is ready. It's shared
 through 1Password:
