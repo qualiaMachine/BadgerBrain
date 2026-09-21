@@ -19,10 +19,7 @@ Details: https://kb.wisc.edu/security/144301
 Setup instructions, with Python and R examples:
 https://github.com/qualiaMachine/RunAI_apps/blob/main/docs/gateway-quickstart.md
 
-Two things have to be in place before the key works:
-
-  1. You're on GlobalProtect (campus VPN).
-  2. Your NetID has been added to the gateway firewall rule. I'll confirm
-     when that's done.
+You'll need to be on the campus VPN (GlobalProtect) for the key to work.
+Setup: https://kb.wisc.edu/ns/90370
 
 Chris
