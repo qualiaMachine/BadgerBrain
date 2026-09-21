@@ -25,6 +25,4 @@ Two things have to be in place before the key works:
   2. Your NetID has been added to the gateway firewall rule. I'll confirm
      when that's done.
 
-Team: {team}
-
 Chris
