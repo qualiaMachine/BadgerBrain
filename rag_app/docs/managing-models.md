@@ -69,7 +69,7 @@ python /models/provision_shared_models.py verify jinaai/jina-embeddings-v4
 # the cached files, plus KV-cache cost per token and a token-budget table
 # per GPU fraction (for choosing --max-model-len). No GPU needed. The same
 # report prints automatically at the end of every `download`.
-python /models/provision_shared_models.py vram Qwen/Qwen3.6-27B-FP8
+python /models/provision_shared_models.py vram Qwen/Qwen3.8-27B-FP8
 ```
 
 6. **Stop** the workspace when done to free resources
