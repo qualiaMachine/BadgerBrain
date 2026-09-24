@@ -16,12 +16,19 @@ Postman.
 | `churro-3b` | chat + vision | **wakes on demand** | OCR of historical documents and handwriting; send page images |
 | `qwen3-vl-embedding-8b` | embeddings | **wakes on demand** | 4096-dim vectors for search / RAG; handles text and images |
 
-**"Wakes on demand" means your first call can take a few minutes.** One
-GPU is dedicated to the always-on chat model; the smaller models share
-the second and shut down when nobody's using them. If you're the first
-person to prompt one in a while, your request starts it up and waits —
-so use a long client timeout and don't mistake it for a failure. See
-[Cold starts](#cold-starts).
+**"Wakes on demand" means your first call can take a few minutes.** The
+pilot has two GPUs: one is dedicated to `qwen3.8-27b`, and everything
+else shares the second and releases it when idle. If you're the first
+person to prompt a sleeping model in a while, your request starts it up
+and waits — usually a minute or two, sometimes longer. The connection is
+held open and nothing is lost; it just sits there.
+
+So: **use a client timeout of 300 seconds** (the examples below do) —
+a 30- or 60-second default gives up mid-startup and looks like a
+failure. A slow first call isn't a fault; if the second comes back
+quickly, that was a cold start. Models stay warm for a few minutes after
+the last request, so you won't hit this repeatedly during active work,
+but it's worth sending a throwaway request a few minutes before a demo.
 
 That's the catalogue as of September 2026. It changes: check this doc for
 the latest, or once you're connected, run the command under
@@ -405,26 +412,6 @@ Sys.setenv(OPENAI_API_KEY = keyring::key_get("litellm"))     # each session
 **Calling `op` from inside R** (`system2("op", c("read", "op://..."))`)
 usually fails with *"account is not signed in"*: the desktop integration
 authorises by calling application, and `rsession` isn't one it accepts.
-
-## Cold starts
-
-The pilot has two GPUs. One is dedicated to `qwen3.8-27b`, which stays
-up. Everything else shares the second GPU and releases it when idle, so
-a model only holds VRAM while someone is using it.
-
-The cost is that the first request to a sleeping model **starts it up
-and waits** — usually a minute or two, sometimes longer. The connection
-is held open the whole time and nothing is lost; it just sits there.
-
-- **Set a long client timeout.** The examples use 300 seconds; a
-  30- or 60-second default gives up mid-startup and looks like a
-  failure.
-- **A slow first call isn't a fault.** If a second request comes back
-  quickly, the first was a cold start.
-- **Warm it up before you need it.** Running a demo, or timing
-  something? Send one throwaway request a few minutes beforehand.
-- Models stay warm for a few minutes after the last request, so during
-  active work you won't hit this repeatedly.
 
 ## Use the gateway URL, not model hostnames
 
