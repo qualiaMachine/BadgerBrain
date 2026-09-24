@@ -126,11 +126,20 @@ Full instructions, including Linux:
 <https://developer.1password.com/docs/cli/get-started/>
 
 Enable the desktop integration: **1Password app → Settings → Developer →
-"Integrate with 1Password CLI"**, then quit and reopen the app. Check:
+"Integrate with 1Password CLI"**, then quit and reopen the app. This is
+what lets `op` unlock through the app instead of asking for a password.
+
+Sign in, then confirm:
 
 ```
+op signin
 op whoami
 ```
+
+`op signin` prompts you to unlock 1Password the first time. With the
+desktop integration on it often prints nothing and returns immediately —
+that's fine, `op whoami` is the check. It should print your account and
+email; if it says *"account is not signed in"*, see the fallback below.
 
 Then load the key at the start of each session:
 
