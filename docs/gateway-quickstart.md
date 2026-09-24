@@ -259,6 +259,62 @@ resp = client.chat.completions.create(
 print(resp.choices[0].message.content)
 ```
 
+### JupyterLab and notebooks
+
+A notebook kernel inherits its environment from whatever launched the
+**Jupyter server**, not from the notebook. So the key has to be in place
+before the server starts. Three ways, best first:
+
+**1. Launch Jupyter through `op run`.** 1Password resolves the key at
+launch and the server inherits it; nothing is written to disk. Put a
+*reference* (not a key) in `jupyter.env`:
+
+```
+OPENAI_API_KEY=op://<vault>/<your item>/credential
+```
+
+```powershell
+# PowerShell
+op run --env-file=.\jupyter.env -- jupyter lab
+```
+
+```bash
+# bash / zsh
+op run --env-file=./jupyter.env -- jupyter lab
+```
+
+That file is safe to commit — it holds no secret. Activate your venv or
+conda env first if you use one; `op run` passes it through.
+
+**2. Set the variable, then launch from the same shell** (Step 2, then
+Step 3). Simplest if you're already in a terminal:
+
+```powershell
+$env:OPENAI_API_KEY = op read "op://<vault>/<your item>/credential"
+jupyter lab
+```
+
+**3. Prompt for it inside the notebook.** If the server is already
+running and you don't want to restart it, `getpass` takes the key
+without it appearing in the cell, the output, or the `.ipynb` file:
+
+```python
+import os, getpass
+os.environ["OPENAI_API_KEY"] = getpass.getpass("OPENAI_API_KEY: ")
+```
+
+Run that once per server session — it survives kernel restarts only if
+you re-run it, so put it in a cell near the top rather than deleting it.
+
+> **Calling `op` from inside a notebook** — `subprocess.run(["op",
+> "read", "op://..."])` — usually fails with *"account is not signed
+> in"*. The 1Password desktop integration authorises by calling
+> application, and `python.exe` isn't one it accepts. Use `op run` at
+> launch instead.
+
+The same applies to VS Code: open it with `code .` from the shell that
+has the variable, or the integrated terminal won't have it either.
+
 ## R
 
 Two reasonable paths:
