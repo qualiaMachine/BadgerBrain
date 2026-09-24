@@ -164,9 +164,16 @@ Two things make this the step most likely to bite you:
 - **The failure is silent and misleading.** A user whose NetID isn't in
   the rule gets `Unable to connect to the remote server` — no 401, no
   mention of the firewall. They will report it as a broken key, and you
-  will debug the key. The triage steps are in
-  [the user quickstart](gateway-quickstart.md#network-access):
-  DNS resolves and ping succeeds, but TCP 443 fails.
+  will debug the key. Have them run this instead:
+
+  ```powershell
+  Test-NetConnection llm-gw01.doit.wisc.edu -Port 443
+  ```
+
+  `PingSucceeded: True` with `TcpTestSucceeded: False` is the signature:
+  the host is reachable, the firewall drops the connection before the
+  gateway sees it. `TcpTestSucceeded: True` means the network is fine and
+  it really is the key or the request.
 
 Consequences worth planning around:
 

@@ -59,29 +59,6 @@ Two things must be true before any of this works:
    VPN isn't enough on its own. Chris arranges this when you request a
    key. It's a manual step with a lead time.
 
-Both failures look the same: a hang, or
-`Unable to connect to the remote server`. To tell which:
-
-```powershell
-# PowerShell
-Resolve-DnsName llm-gw01.doit.wisc.edu
-Test-NetConnection llm-gw01.doit.wisc.edu -Port 443
-```
-
-```bash
-# bash / zsh — 401 means you reached the gateway and it wants a key,
-# which is the result you want here. A hang or connection error is
-# VPN or firewall.
-curl -s -o /dev/null -w "%{http_code}\n" --max-time 10 \
-  https://llm-gw01.doit.wisc.edu/v1/models
-```
-
-| Result | Meaning |
-|---|---|
-| DNS fails | Not on the VPN, or a DNS problem — reconnect GlobalProtect |
-| `PingSucceeded: True`, `TcpTestSucceeded: False` | Your NetID isn't in the firewall rule yet. The host is reachable, but the firewall drops the connection before the gateway sees it. Send Chris your NetID and the full `Test-NetConnection` output |
-| `TcpTestSucceeded: True` | Network is fine; the problem is your key or your request — see the troubleshooting table at the bottom |
-
 ## Step 1 — Get your key, and save it
 
 **Don't have a key yet?** Request one through the
@@ -464,7 +441,7 @@ That shows your key's limits and what it's spent so far.
 
 | What you see | What it usually means |
 |---|---|
-| Hang, or `Unable to connect to the remote server` | Not on GlobalProtect, or your NetID isn't in the firewall rule yet — see [Network access](#network-access) to tell which |
+| Hang, or `Unable to connect to the remote server` | Not on GlobalProtect, or your NetID isn't in the firewall rule yet — see [Network access](#network-access) |
 | `Malformed API Key ... Ensure Key has 'Bearer ' prefix` | Your key never made it into the header. In PowerShell, check you wrote `$env:OPENAI_API_KEY` and not `$OPENAI_API_KEY`, and that any `$headers` variable was built *after* setting it — it captures the value at assignment. In Python, restart the process after setting the variable |
 | `Cannot bind parameter 'Headers'` or `A drive with the name 'https' does not exist` | You ran a bash `curl` command in PowerShell, where `curl` aliases `Invoke-WebRequest`. Use `Invoke-RestMethod`, or `curl.exe` |
 | `Invalid proxy key` / 401 | Wrong key, or it expired — ask for a new share link |
