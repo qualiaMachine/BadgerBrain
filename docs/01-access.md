@@ -11,8 +11,10 @@ used for (in short: public data only, no availability guarantees).
 
 1. **Email Chris or Mike at DoIT** about the AI cluster pilot. Tell
    them roughly what you're looking to do (an app to deploy, a model
-   to fine-tune, an interactive notebook with GPU, etc.) so they can
-   plan the right project assignment.
+   to host, an interactive notebook with GPU, etc.) so they can
+   plan the right project assignment. Training and fine-tuning jobs
+   go to [CHTC](https://chtc.cs.wisc.edu/uw-research-computing/gpu-jobs)
+   rather than this cluster.
 2. They'll send you the **portal URL** for the cluster's RunAI web
    UI.
 3. **Connect to the campus VPN**, then open the URL and log in once.

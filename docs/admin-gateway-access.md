@@ -29,12 +29,17 @@ than a restructure. Don't create a team per person.
 | Tier | Gets | Onboarding | Use when |
 |------|------|-----------|----------|
 | **Endpoint-only** | A LiteLLM virtual key + the gateway base URL | Mint a key, send two lines of config. No Run:ai account. | Someone wants to *call* models — most hackathon participants, app builders, notebook users |
-| **BYO-M** | A scoped Run:ai project (AI Practitioner role, project scope) | Access rule + project + quota, via cluster admin | Someone wants to *run* their own model or fine-tune — see [02 First workspace](02-first-workspace.md) and [07 CLI submission](07-cli-submission.md) |
+| **BYO-M** | A scoped Run:ai project (AI Practitioner role, project scope) | Access rule + project + quota, via cluster admin | Someone wants to *host* their own model on the cluster — see [02 First workspace](02-first-workspace.md) and [07 CLI submission](07-cli-submission.md). Internal / by exception. |
 
 The two systems are independent: LiteLLM knows nothing about Run:ai
 accounts, and Run:ai roles don't gate who can call a gateway endpoint.
 "No Run:ai access" is therefore the *entire* configuration for tier 1 —
 there is nothing to switch off.
+
+Training and fine-tuning requests are not a tier here: point them at
+[CHTC's GPU pool](https://chtc.cs.wisc.edu/uw-research-computing/gpu-jobs).
+The pilot's two GPUs are for serving; a fine-tuned model that comes back
+from CHTC can be hosted as a gateway endpoint like any other.
 
 > **Be precise about what this separates.** Knative serving hostnames
 > (`<workload>-runai-<project>.deepthought.doit.wisc.edu`) are reachable

@@ -37,10 +37,11 @@ Want a model that isn't hosted? Talk to Chris. The pilot runs on two
 RTX Pro 6000s (96 GB VRAM each), and the shared endpoints already
 occupy most of that, so adding a model usually means trading one out.
 
-> **A key gets you these models, not the cluster.** Running your own
-> model, fine-tuning, or getting a GPU workspace needs a Run:ai account,
-> which is a separate request rather than something a key upgrades into.
-> Available on request, but GPU time isn't guaranteed — see
+> **A key gets you these models, not the cluster.** Training and
+> fine-tuning belong on
+> [CHTC](https://chtc.cs.wisc.edu/uw-research-computing/gpu-jobs), not
+> here. Running your own model or getting a GPU workspace on this
+> cluster is a separate request, and GPU time isn't guaranteed — see
 > [Scope](#scope).
 
 ## PowerShell and bash
@@ -516,8 +517,16 @@ A gateway key lets you **call** the models in the catalogue. It doesn't
 give you a Run:ai account, a GPU, storage on the cluster, or the ability
 to host your own model.
 
+**Training and fine-tuning go to CHTC.** The gateway is for inference.
+If you need GPUs to train or fine-tune a model, submit the job to
+[CHTC's GPU pool](https://chtc.cs.wisc.edu/uw-research-computing/gpu-jobs)
+(HTCondor, 1–4 GPUs per job, no BadgerBrain account needed). The
+[GPU Lab](https://chtc.cs.wisc.edu/uw-research-computing/gpu-lab) page
+covers what's available and how to request it. If you've fine-tuned a
+model on CHTC and want it served through the gateway, ask Chris.
+
 **Cluster access is available on request, not by default.** If you want
-to explore fine-tuning or run something the gateway can't do, talk to
+to run something the gateway can't do and CHTC doesn't fit, talk to
 Chris. The pilot has two RTX Pro 6000s (96 GB each) for at least the next
 six months, and the shared endpoints already live on them, so GPU time
 for your own workload can't be promised.

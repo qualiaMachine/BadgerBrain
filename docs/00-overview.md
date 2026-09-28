@@ -24,8 +24,12 @@ This hardware+RunAI may help fill the following niches:
 - **Long-term LLM/VLM apps the institution wants to support.** When a
   service is going to live for years, renting cloud capacity
   permanently doesn't make sense.
-- **Long-running training or fine-tuning jobs.** These get expensive
-  fast in the cloud. Sometimes doable in CHTC, but requires batching and smaller LLMs.
+- **Small-scale fine-tuning and evaluation** that needs a single GPU
+  for a while. For anything larger or longer-running, use
+  [CHTC's GPU pool](https://chtc.cs.wisc.edu/uw-research-computing/gpu-jobs)
+  — it has far more GPUs than this pilot, jobs are submitted through
+  HTCondor as they are today, and no pilot account is needed. This
+  cluster's role is serving models, not training them.
 - **Sensitive / PHI / Institutional data workflows.** Pending the relevant
   cybersecurity reviews — until those complete, the pilot is
   **public data only** (see the [Usage Policy](usage-policy.md)).
