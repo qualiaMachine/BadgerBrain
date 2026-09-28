@@ -4,8 +4,8 @@ Retrieval-augmented generation over research paper corpora. Streamlit
 chat UI backed by vLLM, Jina V4 embeddings, and optional cross-encoder
 reranking. 2025 WattBot Challenge winner.
 
-> **New to the cluster?** Read the [top-level new-user
-> guide](../README.md#new-user-guide) first — especially
+> **New to the cluster?** Read the [top-level cluster
+> guide](../README.md#cluster-guide) first — especially
 > [00 Overview](../docs/00-overview.md) for the Workspace / Data
 > Source / Data Volume mental model and
 > [04 Storage](../docs/04-storage.md) for how data gets onto the

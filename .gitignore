@@ -1,4 +1,4 @@
-# Git ignore for RunAI_apps
+# Git ignore for BadgerBrain
 
 # Environment files (contain secrets!)
 .env

@@ -1,11 +1,12 @@
-# Using the Shared Models (API key only)
+# BadgerBrain Quickstart (API key only)
 
-For anyone who's been handed a **gateway API key** — a hackathon
+For anyone who's been handed a **BadgerBrain API key** — a hackathon
 participant, a lab member, someone building an app. You call the models
 over HTTP from your own laptop, notebook, or server. You don't need a
 Run:ai account, and you never log into the cluster.
 
-The gateway is at **`https://llm-gw01.doit.wisc.edu/v1`** and speaks the
+BadgerBrain is UW-Madison's gateway to open-weight models hosted on
+campus GPUs. It's at **`https://llm-gw01.doit.wisc.edu/v1`** and speaks the
 OpenAI API, so any client that lets you set a base URL works unmodified:
 the `openai` Python package, `httr2` in R, LangChain, LlamaIndex, curl,
 Postman.
@@ -538,7 +539,7 @@ downloaded and given its own GPU workload takes longer. Either way, ask
 sooner rather than at the moment you need it.
 
 If you do get an account, the
-[New User Guide](../README.md#new-user-guide) describes what's involved,
+[Cluster Guide](../README.md#cluster-guide) describes what's involved,
 starting with [00 Overview](00-overview.md).
 
 This is a **pilot**. Read the

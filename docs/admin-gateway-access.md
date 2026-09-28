@@ -1,14 +1,14 @@
-# Handing Out Model Access — Admin Runbook
+# Handing Out BadgerBrain Access — Admin Runbook
 
-> **Admin doc, not part of the [New User Guide](../README.md#new-user-guide).**
+> **Admin doc, not part of the [Cluster Guide](../README.md#cluster-guide).**
 > Everything here assumes gateway admin access and cluster-admin
-> contacts. Participants don't need to read it — send them
-> [Using the Shared Models](gateway-quickstart.md), the user-facing
+> contacts. Participants don't need to read it — send them the
+> [BadgerBrain Quickstart](gateway-quickstart.md), the user-facing
 > counterpart, along with their share link.
 
-How to give people access to the shared models without giving everyone a
-Run:ai account. Written for the ML Marathon, but it is the same three
-steps for anyone: **a Team, and a key per person inside it.**
+How to give people access to the BadgerBrain gateway without giving
+anyone a Run:ai account. Written for the ML Marathon, but it is the same
+three steps for anyone: **a Team, and a key per person inside it.**
 
 "Team" is just the grouping label — whatever you'd want a usage line
 item for:
@@ -156,7 +156,7 @@ Send Mike the NetIDs of everyone who needs access and wait for the rule to
 commit. The `netid` column of your roster is exactly this list:
 
 ```powershell
-cd C:\Users\endemann\Documents\GitHub\RunAI_apps
+cd C:\Users\endemann\Documents\GitHub\BadgerBrain
 (Import-Csv roster.csv).netid -join ", "
 ```
 
@@ -240,7 +240,7 @@ astudent,marathon-team-07,astudent@wisc.edu,,7d
 read` in *your* shell is trusted, so the key is never typed or displayed:
 
 ```powershell
-cd C:\Users\endemann\Documents\GitHub\RunAI_apps
+cd C:\Users\endemann\Documents\GitHub\BadgerBrain
 git pull                                                        # script changes land here
 
 $env:LITELLM_MASTER_KEY = op read "op://BadgerBrain_LiteLLM/LITELLM_MASTER_KEY/credential"
@@ -592,7 +592,7 @@ MSYS_NO_PATHCONV=1 ./runai-cli-amd64.exe inference submit trocr-kurrent \
   --metric concurrency --metric-threshold 16 \
   --scale-to-zero-retention-seconds 300 \
   --initialization-timeout-seconds 1800 \
-  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/RunAI_apps/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/RunAI_apps-main/ocr_app/scripts/trocr_server.py'
+  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/BadgerBrain-main/ocr_app/scripts/trocr_server.py'
 ```
 
 ### Four things that cost an hour to learn

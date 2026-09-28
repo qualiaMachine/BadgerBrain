@@ -11,8 +11,8 @@ watermarks, and annotations — not just raw text. Traditional OCR
 pipelines (Tesseract + regex) are brittle on layout changes and need
 per-document-type rules; the VLM approach replaces both.
 
-> **New to the cluster?** Read the [top-level new-user
-> guide](../README.md#new-user-guide) first — especially
+> **New to the cluster?** Read the [top-level cluster
+> guide](../README.md#cluster-guide) first — especially
 > [00 Overview](../docs/00-overview.md) for the Workspace / Data
 > Source / Data Volume mental model and
 > [04 Storage](../docs/04-storage.md) for how data gets onto the
@@ -204,7 +204,7 @@ MSYS_NO_PATHCONV=1 ./runai-cli-amd64.exe inference submit trocr-kurrent \
   --gpu-devices-request 1 --gpu-request-type portion --gpu-portion-request 0.15 \
   --existing-pvc=claimname=shared-model-repository-project-3w4iu,path=/models \
   --serving-port=container=8000,protocol=http \
-  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/RunAI_apps/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/RunAI_apps-main/ocr_app/scripts/trocr_server.py'
+  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/BadgerBrain-main/ocr_app/scripts/trocr_server.py'
 ```
 
 Do **not** add `--cpu-core-request` / `--cpu-memory-request` — they are

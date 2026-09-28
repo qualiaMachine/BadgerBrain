@@ -1,15 +1,18 @@
 # 00 — Overview
 
-> **Step 0** in the [New User Guide](../README.md#new-user-guide). Read this first to
+> **Step 0** in the [Cluster Guide](../README.md#cluster-guide). Read this first to
 > decide whether the cluster is the right tool, and to learn the three
 > concepts the rest of the guide assumes. The
 > [Usage Policy](usage-policy.md) covers what data is allowed and what
 > to expect from a pilot-stage service — read it before planning real
-> workloads.
+> workloads. If all you want is to *call* models, you don't need any
+> of this — see the [BadgerBrain Quickstart](gateway-quickstart.md).
 
 ## What the cluster is for
 
-The RunAI cluster (`doit-ai-cluster`) is a small DoIT pilot — two
+The RunAI cluster (`doit-ai-cluster`) is the hardware behind
+BadgerBrain, UW-Madison's gateway to open-weight models. Today it's
+a small DoIT pilot — two
 NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs (96 GB GDDR7 each,
 connected by PCIe Gen5 — no NVLink), big enough to host models up
 to ~150B parameters when quantized and split across both cards. RunAI

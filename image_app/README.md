@@ -64,7 +64,7 @@ In the RunAI UI: **Workloads** > **New Workload** > **Inference**
 path):
 
 ```
--c "export TMPDIR=/scratch && pip install --target /scratch/boot uv && /scratch/boot/bin/uv pip install --target /scratch/deps fastapi uvicorn transformers==4.57.1 diffusers accelerate einops scipy numpy pillow tqdm torchvision && curl -sL https://github.com/qualiaMachine/RunAI_apps/archive/refs/heads/main.tar.gz | tar xz -C /scratch && cd /scratch/RunAI_apps-main && PYTHONPATH=/scratch/deps python3 image_app/scripts/hidream_server.py"
+-c "export TMPDIR=/scratch && pip install --target /scratch/boot uv && /scratch/boot/bin/uv pip install --target /scratch/deps fastapi uvicorn transformers==4.57.1 diffusers accelerate einops scipy numpy pillow tqdm torchvision && curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /scratch && cd /scratch/BadgerBrain-main && PYTHONPATH=/scratch/deps python3 image_app/scripts/hidream_server.py"
 ```
 
 Why this differs from the embedding server's simpler
@@ -153,7 +153,7 @@ best-in-class text rendering). Download `Qwen/Qwen-Image` to the PVC
 (~55–60 GB), then deploy with serving endpoint port `8080` and:
 
 ```
--c "pip install uv && curl -sL https://github.com/qualiaMachine/RunAI_apps/archive/refs/heads/main.tar.gz | tar xz -C /tmp && mv /tmp/RunAI_apps-main /tmp/RunAI_apps && cd /tmp/RunAI_apps && uv pip install --system fastapi uvicorn pillow 'diffusers>=0.35' 'transformers>=4.53,<5' accelerate safetensors && python3 image_app/scripts/qwen_image_server.py"
+-c "pip install uv && curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp && mv /tmp/BadgerBrain-main /tmp/BadgerBrain && cd /tmp/BadgerBrain && uv pip install --system fastapi uvicorn pillow 'diffusers>=0.35' 'transformers>=4.53,<5' accelerate safetensors && python3 image_app/scripts/qwen_image_server.py"
 ```
 
 Full GPU (bf16 needs ~60 GB VRAM), or env `OFFLOAD=1` for smaller

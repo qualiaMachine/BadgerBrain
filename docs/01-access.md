@@ -1,6 +1,6 @@
 # 01 — Access
 
-> **Step 1** in the [New User Guide](../README.md#new-user-guide). Should take ~one
+> **Step 1** in the [Cluster Guide](../README.md#cluster-guide). Should take ~one
 > conversation and one VPN connection.
 
 ## How to get access

@@ -17,7 +17,7 @@ invitation email from accounts@1password.com and sign in with your NetID.
 Details: https://kb.wisc.edu/security/144301
 
 Setup instructions, with Python and R examples:
-https://github.com/qualiaMachine/RunAI_apps/blob/main/docs/gateway-quickstart.md
+https://github.com/qualiaMachine/BadgerBrain/blob/main/docs/gateway-quickstart.md
 
 You'll need to be on the campus VPN (GlobalProtect) for the key to work.
 Setup: https://kb.wisc.edu/ns/90370

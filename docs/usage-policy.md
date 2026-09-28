@@ -1,6 +1,6 @@
 # Usage Policy (Pilot)
 
-Interim policy for the local LLM inference pilot. This is not yet a
+Interim policy for the BadgerBrain pilot. This is not yet a
 supported DoIT service — expectations below will change as the service
 formalizes.
 

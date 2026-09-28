@@ -92,7 +92,7 @@ Add Jupyter for browser access:
 ### Arguments (copy-paste)
 
 ```
--c "pip install --no-cache-dir httpx pymupdf Pillow python-dotenv matplotlib; curl -sL https://github.com/qualiaMachine/RunAI_apps/archive/refs/heads/main.tar.gz | tar xz -C /tmp; mv /tmp/RunAI_apps-main /tmp/RunAI_apps 2>/dev/null; ln -sf /tmp/RunAI_apps /ocr/repo; jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --ServerApp.base_url=/${RUNAI_PROJECT}/${RUNAI_JOB_NAME} --ServerApp.token='' --ServerApp.allow_origin='*' --notebook-dir=/ocr"
+-c "pip install --no-cache-dir httpx pymupdf Pillow python-dotenv matplotlib; curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp; mv /tmp/BadgerBrain-main /tmp/BadgerBrain 2>/dev/null; ln -sf /tmp/BadgerBrain /ocr/repo; jupyter-lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --ServerApp.base_url=/${RUNAI_PROJECT}/${RUNAI_JOB_NAME} --ServerApp.token='' --ServerApp.allow_origin='*' --notebook-dir=/ocr"
 ```
 
 Same structural pattern as
@@ -110,8 +110,8 @@ What that string actually does, piece by piece:
 | `-c "..."` | Tells `bash` to run the rest as a shell command, then exit. The whole arguments value is one string. |
 | `pip install --no-cache-dir httpx pymupdf Pillow python-dotenv matplotlib` | Remote-mode dependencies: `httpx` for the vLLM HTTP client, `pymupdf` to render PDF pages to images, `Pillow` for image manipulation, `python-dotenv` for env loading, `matplotlib` for the notebook's inline plots. `--no-cache-dir` skips writing wheel caches inside the pod. No `transformers` / `qwen-vl-utils` here — the model lives on the vLLM server. If you switch to `VLM_MODE = "local"`, the notebook's install cell adds `transformers qwen-vl-utils autoawq` on demand. |
 | `curl -sL https://github.com/.../main.tar.gz \| tar xz -C /tmp` | Pull the current `main` branch as a tarball and unpack it under `/tmp`. Faster and lighter than `git clone` (no `.git` history) and doesn't require git on the image. |
-| `mv /tmp/RunAI_apps-main /tmp/RunAI_apps 2>/dev/null` | GitHub's tarball unpacks to `<repo>-<branch>/`. Rename to a stable path. The redirect swallows the harmless "directory already exists" error on subsequent restarts. |
-| `ln -sf /tmp/RunAI_apps /ocr/repo` | Drop a symlink into the persistent `/ocr` volume so `repo/` shows up in Jupyter's file browser next to your sample documents and notebook outputs. The actual code lives in ephemeral `/tmp` and refreshes from GitHub on every restart — no stale local copy to worry about. |
+| `mv /tmp/BadgerBrain-main /tmp/BadgerBrain 2>/dev/null` | GitHub's tarball unpacks to `<repo>-<branch>/`. Rename to a stable path. The redirect swallows the harmless "directory already exists" error on subsequent restarts. |
+| `ln -sf /tmp/BadgerBrain /ocr/repo` | Drop a symlink into the persistent `/ocr` volume so `repo/` shows up in Jupyter's file browser next to your sample documents and notebook outputs. The actual code lives in ephemeral `/tmp` and refreshes from GitHub on every restart — no stale local copy to worry about. |
 | `;` | Run the next command after the previous one finishes, regardless of exit status. |
 | `jupyter-lab` | Start JupyterLab as the long-running foreground process. |
 | `--ip=0.0.0.0` | Bind to all interfaces so RunAI's proxy can reach the server from outside the pod. The default (`localhost`) only accepts connections from inside the container. |

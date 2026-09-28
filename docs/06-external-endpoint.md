@@ -1,6 +1,6 @@
 # 06 — Expose a vLLM Endpoint Outside the Cluster
 
-> **Step 6** in the [New User Guide](../README.md#new-user-guide). Builds on
+> **Step 6** in the [Cluster Guide](../README.md#cluster-guide). Builds on
 > [03 Share a Model as a vLLM Endpoint](03-share-as-endpoint.md) — assumes
 > you've already stood up the internal-only Qwen2.5-7B endpoint there
 > and want to make it reachable from a non-RunAI client.

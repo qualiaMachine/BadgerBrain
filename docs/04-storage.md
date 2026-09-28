@@ -1,6 +1,6 @@
 # 04 — Storage
 
-> **Step 4** in the [New User Guide](../README.md#new-user-guide). Read [00 Overview](00-overview.md)
+> **Step 4** in the [Cluster Guide](../README.md#cluster-guide). Read [00 Overview](00-overview.md)
 > first if "Data Source vs Data Volume" doesn't ring a bell.
 
 RunAI exposes several overlapping primitives, and the right one
