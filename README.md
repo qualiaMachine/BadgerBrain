@@ -18,9 +18,14 @@ host models, and the example applications built on top of the gateway.
 
 ## Start here
 
+**Want access?** Fill in the
+[BadgerBrain access form](https://forms.gle/vkcLzApNrX7KbkTP9). You'll
+get an API key through 1Password and a link to the quickstart. Keys are
+for UW-Madison NetIDs and require the campus VPN.
+
 | You are... | Read |
 |------------|------|
-| Someone with a **gateway API key** (or who wants one) | [BadgerBrain Quickstart](docs/gateway-quickstart.md) — setup with 1Password, Python and R examples, which models are hosted, cold-start behaviour |
+| Someone with a **gateway API key** | [BadgerBrain Quickstart](docs/gateway-quickstart.md) — setup with 1Password, Python and R examples, which models are hosted, cold-start behaviour |
 | **Handing out keys** to a team, lab, course, or hackathon | [Handing Out BadgerBrain Access](docs/admin-gateway-access.md) — roster CSV → teams → keys → 1Password share links → email, plus autoscaling and load-testing notes |
 | On the **service team**, or hosting your own model by arrangement | The [Cluster Guide](#cluster-guide) below |
 
