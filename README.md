@@ -1,6 +1,6 @@
 # BadgerBrain
 
-BadgerBrain is UW-Madison's service for open-weight AI/ML models, run by
+BadgerBrain is UW-Madison's (upcoming) service for open-weight AI/ML models, run by
 DoIT Research Cyberinfrastructure. It puts an OpenAI-compatible gateway
 (`https://llm-gw01.doit.wisc.edu/v1`) in front of models hosted on
 campus GPUs, so labs, courses, and campus apps call one stable API with
