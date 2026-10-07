@@ -243,8 +243,8 @@ read` in *your* shell is trusted, so the key is never typed or displayed:
 cd C:\Users\endemann\Documents\GitHub\BadgerBrain
 git pull                                                        # script changes land here
 
-$env:LITELLM_MASTER_KEY = op read "op://BadgerBrain_LiteLLM/LITELLM_MASTER_KEY/credential"
-# bash: export LITELLM_MASTER_KEY=$(op read 'op://BadgerBrain_LiteLLM/LITELLM_MASTER_KEY/credential')
+$env:LITELLM_MASTER_KEY = op read "op://BadgerBrain/LITELLM_MASTER_KEY/credential"
+# bash: export LITELLM_MASTER_KEY=$(op read 'op://BadgerBrain/LITELLM_MASTER_KEY/credential')
 
 python scripts\provision_gateway_keys.py roster.csv            # dry run: plan only
 python scripts\provision_gateway_keys.py roster.csv --apply    # mint the keys
@@ -274,7 +274,7 @@ clicking either side.
 The dry run is the default and prints exactly which teams and keys it
 would create. `--apply` is the only thing that writes.
 
-Useful flags: `--vault` (default `BadgerBrain_LiteLLM`), `--gateway`,
+Useful flags: `--vault` (default `BadgerBrain`), `--gateway`,
 `--expires-in` (share-link lifetime, default `14d`), `--op-script`, and
 `--master-key-ref` (only with `--use-op`).
 
