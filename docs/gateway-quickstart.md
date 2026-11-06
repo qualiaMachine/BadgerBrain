@@ -34,9 +34,11 @@ but it's worth sending a throwaway request a few minutes before a demo.
 That's the catalogue as of September 2026. It changes: check this doc for
 the latest, or once you're connected, run the command under
 [Listing models](#listing-models) to see exactly what your key can call.
-Want a model that isn't hosted? Talk to Chris. The pilot runs on two
-RTX Pro 6000s (96 GB VRAM each), and the shared endpoints already
-occupy most of that, so adding a model usually means trading one out.
+Want a model that isn't hosted? Email Chris at
+[endemann@wisc.edu](mailto:endemann@wisc.edu). Models that aren't in
+constant use wake on demand and release their GPU when idle, so adding
+one doesn't mean taking another away — the cost is the cold start
+described above.
 
 > **A key gets you these models, not the cluster.** Training and
 > fine-tuning belong on
