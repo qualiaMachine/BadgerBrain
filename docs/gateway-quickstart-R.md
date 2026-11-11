@@ -44,9 +44,8 @@ but it's worth sending a throwaway request a few minutes before a demo.
 That's the catalogue as of September 2026. It changes: check this doc for
 the latest, or once you're connected, run the command under
 [Listing models](#listing-models) to see exactly what your key can call.
-Want a model that isn't hosted? Talk to Chris. The pilot runs on two
-RTX Pro 6000s (96 GB VRAM each), and the shared endpoints already
-occupy most of that, so adding a model usually means trading one out.
+Want a model that isn't hosted? Email Chris at
+[endemann@wisc.edu](mailto:endemann@wisc.edu).
 
 > **A key gets you these models, not the cluster.** Training and
 > fine-tuning belong on
@@ -108,6 +107,12 @@ This is mandatory even if you're already on campus wifi.
 If you don't have the vpn set up yet, find instructions here:
 <https://kb.wisc.edu/ns/90370>.
 
+The VPN alone isn't enough: your NetID also has to be added to the
+gateway's firewall rule. That's arranged when you request a key, but it's
+a manual step with a lead time. If you're on the VPN and still get
+`Unable to connect to the remote server`, the rule probably isn't in
+place yet — email Chris.
+
 ## Step 2 — Log in to 1Password in the shell
 
 Run the following code chunk. The first line will unlock 1Password.
@@ -127,12 +132,16 @@ op whoami
 >specific key:
 
 ```powershell
-$env:OPENAI_API_KEY = copied key      # PowerShell
+$env:OPENAI_API_KEY = "sk-..."      # PowerShell
 ```
 
 ```bash
-export OPENAI_API_KEY= copied key     # bash / zsh
+export OPENAI_API_KEY="sk-..."      # bash / zsh
 ```
+
+>If you use this fallback, `op run` in Step 4 won't work either. Instead,
+>start your coding environment from this same shell (Step 4 shows how) so
+>it inherits the variable.
 
 ## Step 3 — Load the key
 
@@ -170,7 +179,7 @@ echo ${OPENAI_API_KEY:0:6}             # bash / zsh
 An error or blank line means it isn't set. Don't put the key in your
 code.
 
-## Step 3 — Connect to BadgerBrain in your coding environment
+## Step 4 — Connect to BadgerBrain in your coding environment
 
 This step will vary depending on the environment you're using. This document covers
 using R in RStudio; see  [Quickstart in Python](gateway-quickstart-python.md) for
@@ -185,7 +194,7 @@ First, create and open a new text file:
 
 ```powershell
 #Powershell
-edit rstudio.env
+notepad rstudio.env
 ```
 ```bash
 #bash / zsh
@@ -209,11 +218,15 @@ op run --env-file=.\rstudio.env -- "C:\Program Files\RStudio\rstudio.exe"
 ```
 
 ```bash
-#bash / zsh
-op run --env-file=./rstudio.env -- open -a RStudio
+# macOS — run the app binary directly; `open -a` would not pass the key through
+op run --env-file=./rstudio.env -- /Applications/RStudio.app/Contents/MacOS/RStudio
 ```
 
-## Step 4  — Talking to BadgerBrain models
+If you set the key directly in Step 2 instead, skip the `.env` file and
+start RStudio from that same shell with the same path, minus the
+`op run --env-file=... --` prefix.
+
+## Step 5 — Talking to BadgerBrain models
 
 There are two recommended packages for communicating with remote models in R:
 
@@ -301,24 +314,32 @@ One error you might see could look like this:
  came back empty** 
  
  This happens when RStudio doesn't correctly inherit your shell
- environment (Step 3). Your key is fine. To fix it:
+ environment (Step 4). Your key is fine. To fix it:
 
 ```r
  usethis::edit_r_environ()      # opens ~/.Renviron
 ```
 
-Add one line — no quotes, no `export`. Replace "Your path" with the pathway to your key.
+Add one line with the key itself — no quotes, no `export`. (R reads
+this file directly, so a 1Password `op://` path won't work here.)
 
 ```
-OPENAI_API_KEY= "Your path"
+OPENAI_API_KEY=sk-...
 ```
 
 Then **Session → Restart R** — `.Renviron` is read only at startup.
 To check that it worked: `nchar(Sys.getenv("OPENAI_API_KEY"))`
 
+`.Renviron` stores the key in plain text. To avoid that, set it for the
+current session only and paste the key when prompted:
+
+```r
+Sys.setenv(OPENAI_API_KEY = rstudioapi::askForSecret("OPENAI_API_KEY"))
+```
+
 | What you see | What it usually means |
 |---|---|
-| Hang, or `Unable to connect to the remote server` | Not on GlobalProtect, or your NetID isn't in the firewall rule yet — see [Network access](#network-access) |
+| Hang, or `Unable to connect to the remote server` | Not on GlobalProtect, or your NetID isn't in the firewall rule yet — see Step 1 |
 | `Malformed API Key ... Ensure Key has 'Bearer ' prefix` | Your key never made it into the header. In PowerShell, check you wrote `$env:OPENAI_API_KEY` and not `$OPENAI_API_KEY`, and that any `$headers` variable was built *after* setting it — it captures the value at assignment. In Python, restart the process after setting the variable |
 | `Cannot bind parameter 'Headers'` or `A drive with the name 'https' does not exist` | You ran a bash `curl` command in PowerShell, where `curl` aliases `Invoke-WebRequest`. Use `Invoke-RestMethod`, or `curl.exe` |
 | `Invalid proxy key` / 401 | Wrong key, or it expired — ask for a new share link |
@@ -331,6 +352,22 @@ Lost your key? Request a replacement through the
 contact Chris with the model name and the exact error text.
 
 # Additional Information
+
+## Listing models
+
+The table at the top is a snapshot. To see exactly what your key can call:
+
+```powershell
+# PowerShell
+(Invoke-RestMethod https://llm-gw01.doit.wisc.edu/v1/models `
+   -Headers @{ Authorization = "Bearer $env:OPENAI_API_KEY" }).data.id
+```
+
+```bash
+# bash / zsh
+curl -s https://llm-gw01.doit.wisc.edu/v1/models \
+  -H "Authorization: Bearer $OPENAI_API_KEY"
+```
 
 ## Use the gateway URL, not model hostnames
 
