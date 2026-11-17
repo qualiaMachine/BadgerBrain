@@ -184,7 +184,7 @@ Design choices above that keep the federation door open:
   without code changes.
 - **Portable catalogue schema.** The catalogue table's columns are
   site-agnostic; exporting them as CSV/JSON lets each
-  "BadgerBrain-like" deployment publish its own catalogue, and a
+  "BadgerInfer-like" deployment publish its own catalogue, and a
   LiteLLM-style gateway can eventually federate them (route to
   whichever site hosts the requested model, with local overflow to
   NRP-hosted endpoints for burst or 70B+ requests).

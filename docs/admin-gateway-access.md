@@ -1,12 +1,12 @@
-# Handing Out BadgerBrain Access — Admin Runbook
+# Handing Out BadgerInfer Access — Admin Runbook
 
 > **Admin doc, not part of the [Cluster Guide](../README.md#cluster-guide).**
 > Everything here assumes gateway admin access and cluster-admin
 > contacts. Participants don't need to read it — send them the
-> [BadgerBrain Quickstart](gateway-quickstart.md), the user-facing
+> [BadgerInfer Quickstart](gateway-quickstart.md), the user-facing
 > counterpart, along with their share link.
 
-How to give people access to the BadgerBrain gateway without giving
+How to give people access to the BadgerInfer gateway without giving
 anyone a Run:ai account. Written for the ML Marathon, but it is the same
 three steps for anyone: **a Team, and a key per person inside it.**
 

@@ -6,12 +6,12 @@
 > [Usage Policy](usage-policy.md) covers what data is allowed and what
 > to expect from a pilot-stage service — read it before planning real
 > workloads. If all you want is to *call* models, you don't need any
-> of this — see the [BadgerBrain Quickstart](gateway-quickstart.md).
+> of this — see the [BadgerInfer Quickstart](gateway-quickstart.md).
 
 ## What the cluster is for
 
 The RunAI cluster (`doit-ai-cluster`) is the hardware behind
-BadgerBrain, UW-Madison's gateway to open-weight models. Today it's
+BadgerInfer, UW-Madison's gateway to open-weight models. Today it's
 a small DoIT pilot — two
 NVIDIA RTX PRO 6000 Blackwell Server Edition GPUs (96 GB GDDR7 each,
 connected by PCIe Gen5 — no NVLink), big enough to host models up
