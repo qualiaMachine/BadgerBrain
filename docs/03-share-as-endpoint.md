@@ -227,7 +227,7 @@ The only thing that has to change is the GPU.
      install list so the next Start has the client library
      available. The full string becomes:
      ```
-     -c "curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp; mv /tmp/BadgerBrain-main /tmp/BadgerBrain 2>/dev/null; ln -sf /tmp/BadgerBrain /work/repo; pip install --no-cache-dir transformers accelerate openai; jupyter-lab --ip=0.0.0.0 --allow-root --ServerApp.base_url=/${RUNAI_PROJECT}/${RUNAI_JOB_NAME} --ServerApp.token='' --ServerApp.allow_origin='*' --notebook-dir=/work"
+     -c "curl -sL https://github.com/qualiaMachine/BadgerInfer/archive/refs/heads/main.tar.gz | tar xz -C /tmp; mv /tmp/BadgerInfer-main /tmp/BadgerInfer 2>/dev/null; ln -sf /tmp/BadgerInfer /work/repo; pip install --no-cache-dir transformers accelerate openai; jupyter-lab --ip=0.0.0.0 --allow-root --ServerApp.base_url=/${RUNAI_PROJECT}/${RUNAI_JOB_NAME} --ServerApp.token='' --ServerApp.allow_origin='*' --notebook-dir=/work"
      ```
      (The `transformers` and `accelerate` installs are now wasted CPU
      since you won't load the model in-process, but leaving them in

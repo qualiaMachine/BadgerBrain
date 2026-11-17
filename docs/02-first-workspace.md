@@ -37,7 +37,7 @@ it, talk to cluster admin.
    - **Command:** `bash`
    - **Arguments:**
      ```
-     -c "curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp; mv /tmp/BadgerBrain-main /tmp/BadgerBrain 2>/dev/null; ln -sf /tmp/BadgerBrain /work/repo; pip install --no-cache-dir transformers accelerate; jupyter-lab --ip=0.0.0.0 --allow-root --ServerApp.base_url=/${RUNAI_PROJECT}/${RUNAI_JOB_NAME} --ServerApp.token='' --ServerApp.allow_origin='*' --notebook-dir=/work"
+     -c "curl -sL https://github.com/qualiaMachine/BadgerInfer/archive/refs/heads/main.tar.gz | tar xz -C /tmp; mv /tmp/BadgerInfer-main /tmp/BadgerInfer 2>/dev/null; ln -sf /tmp/BadgerInfer /work/repo; pip install --no-cache-dir transformers accelerate; jupyter-lab --ip=0.0.0.0 --allow-root --ServerApp.base_url=/${RUNAI_PROJECT}/${RUNAI_JOB_NAME} --ServerApp.token='' --ServerApp.allow_origin='*' --notebook-dir=/work"
      ```
 
      Yes, this is annoying. Most of these are RunAI / proxy /
@@ -55,8 +55,8 @@ it, talk to cluster admin.
      |-------|----------------|
      | `-c "..."` | Tells `bash` to run the rest as a shell command, then exit. The whole arguments value is one string. |
      | `curl -sL https://github.com/.../main.tar.gz \| tar xz -C /tmp` | Pull the current `main` branch as a tarball and unpack it under `/tmp`. Faster and lighter than `git clone` (no `.git` history) and doesn't require git on the image. |
-     | `mv /tmp/BadgerBrain-main /tmp/BadgerBrain 2>/dev/null` | GitHub's tarball unpacks to `<repo>-<branch>/`. Rename to a stable path. The redirect swallows the harmless "directory already exists" error on subsequent restarts. |
-     | `ln -sf /tmp/BadgerBrain /work/repo` | Drop a symlink into the persistent volume so `repo/` shows up in Jupyter's file browser next to your notebooks. The actual code lives in ephemeral `/tmp` and refreshes from GitHub on every restart — no stale local copy to worry about. |
+     | `mv /tmp/BadgerInfer-main /tmp/BadgerInfer 2>/dev/null` | GitHub's tarball unpacks to `<repo>-<branch>/`. Rename to a stable path. The redirect swallows the harmless "directory already exists" error on subsequent restarts. |
+     | `ln -sf /tmp/BadgerInfer /work/repo` | Drop a symlink into the persistent volume so `repo/` shows up in Jupyter's file browser next to your notebooks. The actual code lives in ephemeral `/tmp` and refreshes from GitHub on every restart — no stale local copy to worry about. |
      | `pip install --no-cache-dir transformers accelerate` | The PyTorch base image doesn't include HuggingFace `transformers`. `--no-cache-dir` skips writing wheel caches inside the pod (the GPU image is already big). pip installs go to the pod's ephemeral system Python, so this re-runs each restart — that's fine, the wheels are cached on the node. |
      | `;` | Run the next command after the previous one finishes, regardless of exit status. |
      | `jupyter-lab` | Start JupyterLab as the long-running foreground process. |
@@ -251,7 +251,7 @@ your data is still there when you Start again.
 ## Step E. Try repeating the above steps with your own GitHub code repository.
 
 The whole walkthrough hinges on one URL — the
-`curl -sL https://github.com/qualiaMachine/BadgerBrain/.../main.tar.gz`
+`curl -sL https://github.com/qualiaMachine/BadgerInfer/.../main.tar.gz`
 in your runtime args. Swap that for any GitHub repo of your own and
 the rest of the workspace config is unchanged: `/work` still
 persists your notebooks, `shared-models` still mounts the same

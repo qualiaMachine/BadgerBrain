@@ -156,7 +156,7 @@ Send Mike the NetIDs of everyone who needs access and wait for the rule to
 commit. The `netid` column of your roster is exactly this list:
 
 ```powershell
-cd C:\Users\endemann\Documents\GitHub\BadgerBrain
+cd C:\Users\endemann\Documents\GitHub\BadgerInfer
 (Import-Csv roster.csv).netid -join ", "
 ```
 
@@ -240,7 +240,7 @@ astudent,marathon-team-07,astudent@wisc.edu,,7d
 read` in *your* shell is trusted, so the key is never typed or displayed:
 
 ```powershell
-cd C:\Users\endemann\Documents\GitHub\BadgerBrain
+cd C:\Users\endemann\Documents\GitHub\BadgerInfer
 git pull                                                        # script changes land here
 
 $env:LITELLM_MASTER_KEY = op read "op://BadgerBrain/LITELLM_MASTER_KEY/credential"
@@ -592,7 +592,7 @@ MSYS_NO_PATHCONV=1 ./runai-cli-amd64.exe inference submit trocr-kurrent \
   --metric concurrency --metric-threshold 16 \
   --scale-to-zero-retention-seconds 300 \
   --initialization-timeout-seconds 1800 \
-  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/BadgerBrain-main/ocr_app/scripts/trocr_server.py'
+  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/BadgerInfer/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/BadgerInfer-main/ocr_app/scripts/trocr_server.py'
 ```
 
 ### Four things that cost an hour to learn

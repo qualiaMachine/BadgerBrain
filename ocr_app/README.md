@@ -204,7 +204,7 @@ MSYS_NO_PATHCONV=1 ./runai-cli-amd64.exe inference submit trocr-kurrent \
   --gpu-devices-request 1 --gpu-request-type portion --gpu-portion-request 0.15 \
   --existing-pvc=claimname=shared-model-repository-project-3w4iu,path=/models \
   --serving-port=container=8000,protocol=http \
-  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/BadgerBrain/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/BadgerBrain-main/ocr_app/scripts/trocr_server.py'
+  -c -- bash -c 'curl -sL https://github.com/qualiaMachine/BadgerInfer/archive/refs/heads/main.tar.gz | tar xz -C /tmp && pip install --no-cache-dir --target /tmp/deps "transformers>=4.42,<5" sentencepiece protobuf && PYTHONPATH=/tmp/deps python3 /tmp/BadgerInfer-main/ocr_app/scripts/trocr_server.py'
 ```
 
 Do **not** add `--cpu-core-request` / `--cpu-memory-request` — they are
