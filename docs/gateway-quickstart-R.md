@@ -1,13 +1,13 @@
-# BadgerBrain Quickstart (API key only)
+# BadgerInfer Quickstart (API key only)
 
-For anyone who's been handed a **BadgerBrain API key** — a hackathon
+For anyone who's been handed a **BadgerInfer API key** — a hackathon
 participant, a lab member, someone building an app. You call the models
 over HTTP from your own laptop, notebook, or server. You don't need a
 Run:ai account, and you never log into the cluster.
 
 >**Getting a key:** 
 >If you don't have a key yet, you can request one through the
->[BadgerBrain access form](https://forms.gle/vkcLzApNrX7KbkTP9). It asks
+>[BadgerInfer access form](https://forms.gle/vkcLzApNrX7KbkTP9). It asks
 >which group or project you're with, so your usage lands under the right
 >team, and your NetID, so the firewall rule can be updated. The key
 >arrives as a **1Password share link** — that's the only way keys go out
@@ -15,7 +15,7 @@ Run:ai account, and you never log into the cluster.
 >The link is locked to your `@wisc.edu` address and expires. If it has
 >expired or you lose it, request another.
 
-BadgerBrain is UW-Madison's gateway to open-weight models hosted on
+BadgerInfer is UW-Madison's gateway to open-weight models hosted on
 campus GPUs. It's at **`https://llm-gw01.doit.wisc.edu/v1`** and speaks the
 OpenAI API, so any client that lets you set a base URL works unmodified:
 the `openai` Python package, `httr2` in R, LangChain, LlamaIndex, curl,
@@ -99,7 +99,7 @@ go to **Settings → Developer → "Integrate with 1Password CLI"**, then quit a
 This lets `op` unlock through the app instead of asking for a password.
 
 
-## Connecting to Badger Brain
+## Connecting to BadgerInfer
 
 ## Step 1 — Log in and connect to the **GlobalProtect** vpn.
 
@@ -153,7 +153,7 @@ It will start with `op://`, followed by the name of the vault. If you get
 1Password through the University of Wisconsin and haven't customized your set-up,
 the vault name is likely `Employee`, but you can check by looking at the Vault tab on the left-hand
 menu of 1Password. Then give the name of the item, followed by `credential`. A complete
-path might read something like: "op://Employee/BadgerBrain/credential". In the following code,
+path might read something like: "op://Employee/BadgerInfer/credential". In the following code,
 replace `Your Pathway` with your item's actual path.
 
 ```powershell
@@ -179,7 +179,7 @@ echo ${OPENAI_API_KEY:0:6}             # bash / zsh
 An error or blank line means it isn't set. Don't put the key in your
 code.
 
-## Step 4 — Connect to BadgerBrain in your coding environment
+## Step 4 — Connect to BadgerInfer in your coding environment
 
 This step will vary depending on the environment you're using. This document covers
 using R in RStudio; see  [Quickstart in Python](gateway-quickstart-python.md) for
@@ -226,7 +226,7 @@ If you set the key directly in Step 2 instead, skip the `.env` file and
 start RStudio from that same shell with the same path, minus the
 `op run --env-file=... --` prefix.
 
-## Step 5 — Talking to BadgerBrain models
+## Step 5 — Talking to BadgerInfer models
 
 There are two recommended packages for communicating with remote models in R:
 
@@ -403,7 +403,7 @@ to host your own model.
 **Training and fine-tuning go to CHTC.** The gateway is for inference.
 If you need GPUs to train or fine-tune a model, submit the job to
 [CHTC's GPU pool](https://chtc.cs.wisc.edu/uw-research-computing/gpu-jobs)
-(HTCondor, 1–4 GPUs per job, no BadgerBrain account needed). The
+(HTCondor, 1–4 GPUs per job, no BadgerInfer account needed). The
 [GPU Lab](https://chtc.cs.wisc.edu/uw-research-computing/gpu-lab) page
 covers what's available and how to request it. If you've fine-tuned a
 model on CHTC and want it served through the gateway, ask Chris.

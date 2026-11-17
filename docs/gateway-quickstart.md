@@ -1,6 +1,6 @@
-# BadgerBrain Quickstart (API key only)
+# BadgerInfer Quickstart (API key only)
 
-For anyone who's been handed a **BadgerBrain API key**. Pick the guide
+For anyone who's been handed a **BadgerInfer API key**. Pick the guide
 for the language you'll call the models from:
 
 - **[Quickstart in Python](gateway-quickstart-python.md)** — JupyterLab
@@ -13,4 +13,4 @@ connecting over GlobalProtect, and loading the key without putting it in
 your code.
 
 Don't have a key yet? Request one through the
-[BadgerBrain access form](https://forms.gle/vkcLzApNrX7KbkTP9).
+[BadgerInfer access form](https://forms.gle/vkcLzApNrX7KbkTP9).

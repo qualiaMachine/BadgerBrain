@@ -1,6 +1,6 @@
-# BadgerBrain
+# BadgerInfer
 
-BadgerBrain is UW-Madison's (upcoming) service for open-weight AI/ML models, run by
+BadgerInfer is UW-Madison's (upcoming) service for open-weight AI/ML models, run by
 DoIT Research Cyberinfrastructure. It puts an OpenAI-compatible gateway
 (`https://llm-gw01.doit.wisc.edu/v1`) in front of models hosted on
 campus GPUs, so labs, courses, and campus apps call one stable API with
@@ -19,17 +19,17 @@ host models, and the example applications built on top of the gateway.
 ## Start here
 
 **Want access?** Fill in the
-[BadgerBrain access form](https://forms.gle/vkcLzApNrX7KbkTP9). You'll
+[BadgerInfer access form](https://forms.gle/vkcLzApNrX7KbkTP9). You'll
 get an API key through 1Password and a link to the quickstart. Keys are
 for UW-Madison NetIDs and require the campus VPN.
 
 | You are... | Read |
 |------------|------|
-| Someone with a **gateway API key** | [BadgerBrain Quickstart](docs/gateway-quickstart.md) — setup with 1Password, Python and R examples, which models are hosted, cold-start behaviour |
-| **Handing out keys** to a team, lab, course, or hackathon | [Handing Out BadgerBrain Access](docs/admin-gateway-access.md) — roster CSV → teams → keys → 1Password share links → email, plus autoscaling and load-testing notes |
+| Someone with a **gateway API key** | [BadgerInfer Quickstart](docs/gateway-quickstart.md) — setup with 1Password, Python and R examples, which models are hosted, cold-start behaviour |
+| **Handing out keys** to a team, lab, course, or hackathon | [Handing Out BadgerInfer Access](docs/admin-gateway-access.md) — roster CSV → teams → keys → 1Password share links → email, plus autoscaling and load-testing notes |
 | On the **service team**, or hosting your own model by arrangement | The [Cluster Guide](#cluster-guide) below |
 
-**Training and fine-tuning** are not a BadgerBrain offering. Submit
+**Training and fine-tuning** are not a BadgerInfer offering. Submit
 those jobs to [CHTC's GPU pool](https://chtc.cs.wisc.edu/uw-research-computing/gpu-jobs)
 (HTCondor); a model fine-tuned there can be hosted through the gateway
 afterwards. Interactive notebook sessions on shared GPUs go through
@@ -155,7 +155,7 @@ All apps use the same approach:
 |--------|---------|
 | `hardware_metrics.py` | GPU/energy profiling — VRAM, power draw, energy per request |
 | `provision_shared_models.py` | Download HuggingFace models to the shared PVC; `vram` subcommand estimates serving VRAM (weights + KV-cache/`--max-model-len` guidance) before you commit GPU quota |
-| `provision_gateway_keys.py` | Admin-only: create LiteLLM gateway teams and per-user keys from a roster CSV, filing each key in 1Password and emitting recipient-locked share links. See [Handing Out BadgerBrain Access](docs/admin-gateway-access.md) |
+| `provision_gateway_keys.py` | Admin-only: create LiteLLM gateway teams and per-user keys from a roster CSV, filing each key in 1Password and emitting recipient-locked share links. See [Handing Out BadgerInfer Access](docs/admin-gateway-access.md) |
 
 
 
